@@ -1,0 +1,89 @@
+000100190318     A*%%TS  SD  20190318  132751  OTTO        REL-V7R3M0  5770-WDS
+000200190318     A*%%EC
+000300190412     A                                      DSPSIZ(27 132 *DS4)
+000301200312     A                                      CF03(03 'Verlassen')
+000303200123     A                                      CF12(12 'Abbrechen')
+000304201124     A                                      VLDCMDKEY(97)
+000400190318     A                                      PRINT
+000500190318     A                                      INDARA
+000501200123      *_________________________________________________________________________
+000502200123     A          R HEADER
+000503200318     A*                                     OVERLAY
+000504200123     A            TITL         131A  O  1  2COLOR(WHT)
+000505210226     A*                                     OVERLAY
+000506210226     A            TXNAME       131A     2  2COLOR(BLU)
+000901190725      *_________________________________________________________________________
+001000190701     A          R SUBFILE                   SFL
+001003200124     A            ROWNUMBERH    10Y 0H
+001004220615     A            IDH           10Y 0H
+001100180712     A*%%TS  SD  20180712  162441  SEESER      REL-V7R3M0  5770-WDS
+001300210127     A            WAHL           1A  B  8  2
+001301200123     A  79                                  DSPATR(HI)
+001500190702     A                                      DSPATR(UL)
+001701190725     A                                      COLOR(PNK)
+001800210127     A            SFL1         129   O  8  4
+001801200123     A  79                                  DSPATR(HI)
+001802200123     A  80                                  COLOR(RED)
+001803201117     A  81                                  COLOR(BLU)
+001804210127     A            SFL2         129   O  9  4
+001805200123     A  79                                  DSPATR(HI)
+001806200123     A  80                                  COLOR(RED)
+001807201117     A  81                                  COLOR(BLU)
+001904190725      *_________________________________________________________________________
+002000190701     A          R CONTROLSFL                SFLCTL(SUBFILE)
+002002210215     A                                      CF04(04 'FKEY04')
+002003210315     A                                      CF05(05 'FKEY05')
+002004200131     A                                      CF06(06 'Neuanlage')
+002005200131     A                                      CF07(07 'Ausklappen')
+002006210308     A                                      CF08(08 'FKEY08')
+002007210315     A                                      CF10(10 'FKEY10')
+002008200123     A                                      OVERLAY
+002100190701     A*%%TS  SD  20190318  132751  OTTO        REL-V7R3M0  5770-WDS
+002102200123     A N78                                  SFLDROP(CF21)
+002103200123     A  78                                  SFLFOLD(CF21)
+002104200123     A  40                                  SFLCLR
+002105200123     A  41                                  SFLDSP
+002106200123     A  42                                  SFLEND(*MORE)
+002300190701     A                                      SFLDSPCTL
+002301190702     A                                      PAGEUP(70)
+002302190702     A                                      PAGEDOWN(71)
+002400200318     A                                      SFLPAG(8)
+002500190318     A                                      SFLSIZ(9999)
+003100190702     A                                      HELP
+003400190702     A                                      BLINK
+003401201116      * SFLCSRRN Cursor location
+003402201116     A                                      SFLCSRRRN(&ARRN)
+003403220617     A            ARRN           5S 0H
+003404201116      * SFLRCDNBR RRN of the First record displayed on the screen
+003405201116     A            CURX           4S 0H      SFLRCDNBR(CURSOR)
+005400210127     A            ZEILE1       131      6  2
+005401200123     A  78                                  DSPATR(RI)
+005500210127     A            ZEILE2       131   O  7  2DSPATR(RI)
+005511200124     A*
+005512210127     A            AUSWAHL      131   O  5  2COLOR(BLU)
+005514220615     A            NAMEV         10   B  3  7
+005516220615     A            NAMEB         10   B  3 24
+005518210217     A*
+005519220615     A                                  3  2'Name'
+005520210217     A                                      COLOR(BLU)
+005521210217     A*
+005522220615     A                                  3 19'bis'
+005523210217     A                                      COLOR(BLU)
+005524210316     A*
+005525210316     A            STATUSF      131   O  4  2COLOR(PNK)
+005526190725      *_________________________________________________________________________
+005600190701     A          R FOOTER
+005700180713     A*%%TS  SD  20180713  102342  SEESER      REL-V7R3M0  5770-WDS
+005900190416     A                                      OVERLAY
+006400200416     A            INFO         131A  O 26  2
+006500180713     A                                      DSPATR(UL)
+006600200122     A            FTZ          131   O 27  2COLOR(BLU)
+006700220615     A*%%RS+<record-sequences>
+006800220615     A*%%RS+ <sequence name="Overview">
+006900220615     A*%%RS+  <device type="display" width="132" height="27" />
+007000220615     A*%%RS+  <record-write record-format="FOOTER" />
+007100220615     A*%%RS+  <record-write record-format="SUBFILE" />
+007200220615     A*%%RS+  <record-write record-format="CONTROLSFL" />
+007300220615     A*%%RS+  <record-write record-format="HEADER" />
+007400220615     A*%%RS+ </sequence>
+007401220615     A*%%RS </record-sequences>
