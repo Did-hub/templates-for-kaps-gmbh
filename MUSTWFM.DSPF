@@ -1,0 +1,64 @@
+000100130422     A*%%TS  SD  20130422  094303  SEESER      REL-V6R1M0  5761-WDS
+000200130422     A*%%EC
+000300130422     A                                      DSPSIZ(27 132 *DS4)
+000400130422     A                                      PRINT
+000500130422     A                                      INDARA
+000501210519     A                                      CF03(03 'Verlassen')
+000503210519     A                                      CF12(12 'Abbrechen')
+000504221104     A                                      VLDCMDKEY(97)
+000505210520     A                                      HELP
+000506221104     A          R HELP
+000507221104     A                                      ASSUME
+000508221104     A                                      OVERLAY
+000509221104     A            FLD001         1   O  1  3
+005800210519     A          R HEADER
+005801221104     A                                      OVERLAY
+005802221104     A                                      WINDOW(BODY)
+006000221104     A            TITL          75A  O  1  1DSPATR(HI)
+006101210519     A          R BODY
+006102221104     A                                      OVERLAY
+006103221104     A                                      WINDOW(&POSY &POSX 12 75 *NOMSGLIN)
+006104221104     A            POSX           3S 0P
+006105221104     A            POSY           3S 0P
+006106220804     A            RPLTXT        78A  P
+006107221104     A                                  2  1'Name'
+006109221104     A            NAME          10A  B  2 39
+006110221107     A N71                                  DSPATR(PC)
+006111221107     A  71                                  COLOR(PNK)
+006112221107     A  71                                  DSPATR(PR)
+006113221107     A N71                                  DSPATR(UL)
+006117221104     A            FIELD         35   B  6  1
+006118210519     A                                      DSPATR(PR)
+006119210519     A  53                                  DSPATR(UL)
+006120221104     A            FIELD1        35   B  7  1
+006121210520     A                                      DSPATR(PR)
+006122210519     A  53                                  DSPATR(UL)
+006123221104     A            STATE          1A  B  7 39
+006124221104     A                                      DSPATR(PC)
+006125221107     A N71                                  COLOR(PNK)
+006126221107     A N71                                  DSPATR(PR)
+006127221107     A  71                                  DSPATR(UL)
+006128221104     A            ARTIKLE       10A  B  6 39
+006129220804     A  07                                  ERRMSGID(MSG2000 CONSOLEMSG 07 +
+006130220804     A                                      &RPLTXT)
+006131221107     A                                      DSPATR(PC)
+006132221107     A N71                                  COLOR(PNK)
+006133221107     A N71                                  DSPATR(PR)
+006134221107     A  71                                  DSPATR(UL)
+006135221104     A            DESC          80A  B  8 39
+006136221104     A                                      CNTFLD(30)
+006137221104     A                                      DSPATR(PC)
+006138221107     A N71                                  COLOR(PNK)
+006139221107     A N71                                  DSPATR(PR)
+006140221107     A  71                                  DSPATR(UL)
+006141221104     A            FIELD2        35   B  8  1
+006142210520     A                                      DSPATR(PR)
+006143210519     A  53                                  DSPATR(UL)
+006167210519     A          R FOOTER
+006168210520     A                                      OVERLAY
+006169221104     A                                      WINDOW(BODY)
+006200221104     A            FTZ           75A  O 12  1COLOR(BLU)
+006203221104     A            INFO          75A    11  1
+006204221104     A N51                                  COLOR(BLU)
+006205221104     A  51                                  COLOR(RED)
+006206210520     A                                      DSPATR(UL)

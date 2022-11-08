@@ -25,52 +25,54 @@
 000041201202       // Programm Informationen
 000042201202       /copy qrpglesrc,mypsds
 000043201116
-000044201202       //_______________________________________
-000045201202       //Subfile Variablen
-000046201202       DCL-S Recnum1                Zoned(4:0);
-000047201116
-000048201116
-000049201202       //Interne Variable
-000050201202       DCL-S Seite       Zoned(10:0) INZ(1);
-000051201202       DCL-S Page_Rec    like(ROWNUMBERH) DIM(99999);
-000052201202       DCL-S sqlcmd CHAR(2056);
-000053201202       DCL-S Lizenz CHAR(5);
-000054210217       DCL-S satz_vorhanden ind;
-000055210316       DCL-S exist INT(5);
-000056221103       DCL-S Ansicht INT(5) INZ(1);  // 1=Ansicht1 Beschreibung
-000057221103                                     // 2=Ansicht2 Beschreibung
-000058221103                                     // 3=Ansicht3 Beschreibung
-000059221103                                     // 4=Ansicht4 Beschreibung
-000060210217       DCL-S von_Leistungstag_ymd ZONED(6:0);
-000061210217       DCL-S bis_Leistungstag_ymd ZONED(6:0);
-000062210721
-000065201202       DCL-DS TASTEN;
-000066201202       STATUS *STATUS;
-000067201202       END-DS;
-000068201202       // dsp_Indicatoren
-000069201202       DCL-DS dsIndicator;
-000070201202       FKey03_Beenden                         ind   POS(03) ;
-000071210215       FKey04                                 ind   POS(04) ;
-000072210315       FKey05                                 ind   POS(05) ;
-000073210308       FKey08                                 ind   POS(08) ;
-000074210315       FKey10                                 ind   POS(10) ;
-000075210218       FKey12_Abbrechen                       ind   POS(12) ;
-000076201202       FKey23_Loeschen                        ind   POS(23) ;
-000077201202       Subfile_CLEAR                          ind   POS(40) ;
-000078201202       Subfile_DSP                            ind   POS(41) ;
-000079201202       Subfile_END                            ind   POS(42) ;
-000080201202       Eingabe_zwingend_43                    ind   POS(43) ;
-000081201202       INFO_GREEN                             ind   POS(50) ;
-000082201202       INFO_RED                               ind   POS(51) ;
-000083201202       Seite_zurueck                          ind   POS(70) ;
-000084201202       Seite_weiter                           ind   POS(71) ;
-000085201202       Ausklappen                             ind   POS(78) ;
-000086201202       Dunkel_Hell                            ind   POS(79) ;
-000087201202       sfl_red                                ind   POS(80) ;
-000088201202       sfl_blu                                ind   POS(81) ;
-000089201202       nicht_Eingabe                          ind   POS(97) ;
-000090201202       END-DS;
-000091201116
+000044221107       // Window Update Write
+000045221107       DCL-PR MUSTW EXTPGM;
+000046221108       p_ID INT(10) CONST;
+000047221107       END-PR;
+000050221107
+000051201202       //_______________________________________
+000052201202       //Subfile Variablen
+000053201202       DCL-S Recnum1                Zoned(4:0);
+000054201116
+000055201202       //Interne Variable
+000056201202       DCL-S Seite       Zoned(10:0) INZ(1);
+000057201202       DCL-S Page_Rec    like(ROWNUMBERH) DIM(99999);
+000058221107       DCL-S sqlcmd CHAR(32000);
+000059201202       DCL-S Lizenz CHAR(5);
+000060210217       DCL-S satz_vorhanden ind;
+000061210316       DCL-S exist INT(5);
+000062221103       DCL-S Ansicht INT(5) INZ(1);  // 1=Ansicht1 Beschreibung
+000063221103                                     // 2=Ansicht2 Beschreibung
+000064221103                                     // 3=Ansicht3 Beschreibung
+000065221103                                     // 4=Ansicht4 Beschreibung
+000066210721
+000067201202       DCL-DS TASTEN;
+000068201202       STATUS *STATUS;
+000069201202       END-DS;
+000070201202       // dsp_Indicatoren
+000071201202       DCL-DS dsIndicator;
+000072201202       FKey03_Beenden                         ind   POS(03) ;
+000073210215       FKey04                                 ind   POS(04) ;
+000074210315       FKey05                                 ind   POS(05) ;
+000075210308       FKey08                                 ind   POS(08) ;
+000076210315       FKey10                                 ind   POS(10) ;
+000077210218       FKey12_Abbrechen                       ind   POS(12) ;
+000078201202       FKey23_Loeschen                        ind   POS(23) ;
+000079201202       Subfile_CLEAR                          ind   POS(40) ;
+000080201202       Subfile_DSP                            ind   POS(41) ;
+000081201202       Subfile_END                            ind   POS(42) ;
+000082201202       Eingabe_zwingend_43                    ind   POS(43) ;
+000083201202       INFO_GREEN                             ind   POS(50) ;
+000084201202       INFO_RED                               ind   POS(51) ;
+000085201202       Seite_zurueck                          ind   POS(70) ;
+000086201202       Seite_weiter                           ind   POS(71) ;
+000087201202       Ausklappen                             ind   POS(78) ;
+000088201202       Dunkel_Hell                            ind   POS(79) ;
+000089201202       sfl_red                                ind   POS(80) ;
+000090201202       sfl_blu                                ind   POS(81) ;
+000091201202       nicht_Eingabe                          ind   POS(97) ;
+000092201202       END-DS;
+000093201116
 000098201202         // Datenstrukturen
 000099220615         DCL-DS dsYMUST extname('YMUST') qualified END-DS;
 000100220615
@@ -147,37 +149,40 @@
 000249210518        END-PROC;
 000250201202       //____________________________________________________________________
 000251201202         DCL-PROC Checkinput;
-000252210215         DCL-S ID BINDEC(9:0);
 000253210518
-000254210518         // Wenn Eingabe Aenderung
-000256210518         // und Aenderung Speichern
-000257220615         IF Eingabe <> dsControlSFL;
-000259210518          Seite = 1;
-000260220615          Eingabe = dsControlSFL;
-000263210518         ENDIF;
+000254221108        // Wenn Eingabe Aenderung
+000256221108        // und Aenderung Speichern
+000257221108        IF Eingabe <> dsControlSFL;
+000259221108        Seite = 1;
+000260221108        Eingabe = dsControlSFL;
+000263221108        ENDIF;
 000264210518
-000265210122       IF STATUS = 1125;
+000265221108        IF STATUS = 1125;
 000266210722        i_HILFE();
 000270210122        ENDIF;
 000271210122
-000272220615        // Ansicht Wechsel
-000273210315        IF FKey05 = *ON;
-000275210518          Seite = 1;
-000276210315          SELECT;
-000277221103            WHEN Ansicht = 1;
-000278221103                 Ansicht = 2;
-000279210315
-000280221103            WHEN Ansicht = 2;
-000281221103                 Ansicht = 3;
-000285210315
-000286221103            WHEN Ansicht = 3;
-000287221103                 Ansicht = 4;
-000288221103
-000289221103            WHEN Ansicht = 4;
-000290221103                 Ansicht = 1;
-000291210315
-000292210315          ENDSL;
-000293210315        ENDIF;
+000273221108        IF FKey04 = *ON;
+000274221108         callp MUSTW(IDH);
+000275221108        ENDIF;
+000276221108
+000277220615        // Ansicht Wechsel
+000278210315        IF FKey05 = *ON;
+000279210518          Seite = 1;
+000280210315          SELECT;
+000281221103            WHEN Ansicht = 1;
+000282221103                 Ansicht = 2;
+000283210315
+000284221103            WHEN Ansicht = 2;
+000285221103                 Ansicht = 3;
+000286210315
+000287221103            WHEN Ansicht = 3;
+000288221103                 Ansicht = 4;
+000289221103
+000290221103            WHEN Ansicht = 4;
+000291221104                 Ansicht = 1;
+000292210315
+000293210315          ENDSL;
+000294210315        ENDIF;
 000308210315
 000335210721       IF NOT nicht_Eingabe = *ON;
 000336201202       IF SUBFILE_DSP = *ON;
@@ -188,49 +193,52 @@
 000341220615           // Auswahl
 000342210315
 000345210315         When Wahl= '4';
-000346220615           // dlt()
-000347220615
-000351201202       OTHER;
-000352220615       ENDSL;
-000353201202       READC SUBFILE;              // nach lesen
-000354211103
-000355211103        // Cursor auf Subfilesatz zurücksetzen
-000356220617        dsCONTROLSFL.curx = Recnum1;                  //dsCONTROLSFL.curx in DSP gesetzt
-000357201202       ENDDO;
-000358201202       ENDIF;
-000359210721       ENDIF;
-000360201116
-000361201202       IF  Seite_weiter=*on AND Subfile_END=*OFF;
-000362201202       Seite += 1;
-000363201202       Page_rec(Seite)=ROWNUMBERH;
-000364201202       ENDIF;
-000365201202       IF  Seite_zurueck=*on AND Seite <> 1;
-000366201202       Seite -= 1;
-000367201202       ENDIF;
-000368210518
-000369220617         ARRN = dsCONTROLSFL.ARRN;
-000370220617         dsCONTROLSFL.curx = locate_Cursor(ARRN);
-000371201202        END-PROC;
-000372201202       //____________________________________________________________________
-000373201202        DCL-PROC FILL;
-000374201116
-000375201202       Exsr Clear_SFL;
-000376201202       Subfile_END = *OFF;
-000377201116
-000378201202       ROWNUMBERH=Page_rec(Seite);
-000379210217
-000380210217        exec sql
-000381220615        declare CursorX scroll Cursor for
-000382220615        select fuse.* from
-000383210217        (
-000384210217        select ROW_NUMBER()
-000385220615        OVER(order by NAME desc) AS rownumber
-000386220615        ,ID
-000387220615        ,NAME
-000388220617        ,ARTIKLE
-000389220617        ,STATUS
-000390220617        ,DESC
-000392220615        from YMUST A1
+000347221108           DltChoice(IDH);
+000348221108
+000349221108         When Wahl= 'A';
+000351221108           callp MUSTW(IDH);
+000352220615
+000353201202       OTHER;
+000354220615       ENDSL;
+000355201202       READC SUBFILE;              // nach lesen
+000356211103
+000357211103        // Cursor auf Subfilesatz zurücksetzen
+000358220617        dsCONTROLSFL.curx = Recnum1;                  //dsCONTROLSFL.curx in DSP gesetzt
+000359201202       ENDDO;
+000360201202       ENDIF;
+000361210721       ENDIF;
+000362201116
+000363201202       IF  Seite_weiter=*on AND Subfile_END=*OFF;
+000364201202       Seite += 1;
+000365201202       Page_rec(Seite)=ROWNUMBERH;
+000366201202       ENDIF;
+000367201202       IF  Seite_zurueck=*on AND Seite <> 1;
+000368201202       Seite -= 1;
+000369201202       ENDIF;
+000370210518
+000371220617         ARRN = dsCONTROLSFL.ARRN;
+000372220617         dsCONTROLSFL.curx = locate_Cursor(ARRN);
+000373201202        END-PROC;
+000374201202       //____________________________________________________________________
+000375201202        DCL-PROC FILL;
+000376201116
+000377201202       Exsr Clear_SFL;
+000378201202       Subfile_END = *OFF;
+000379201116
+000380201202       ROWNUMBERH=Page_rec(Seite);
+000381210217
+000382210217        exec sql
+000383220615        declare CursorX scroll Cursor for
+000384220615        select fuse.* from
+000385210217        (
+000386210217        select ROW_NUMBER()
+000387220615        OVER(order by NAME desc) AS rownumber
+000388220615        ,ID
+000389220615        ,NAME
+000390220617        ,ARTIKLE
+000391221104        ,State
+000392220617        ,DESC
+000393220615        from YMUST A1
 000397210217        where
 000398220615         1= 1
 000410210315          and
@@ -262,16 +270,16 @@
 000458220615       ,:dsYMUST.ID
 000459220615       ,:dsYMUST.NAME
 000460220617       ,:dsYMUST.ARTIKLE
-000461220617       ,:dsYMUST.STATUS
+000461221104       ,:dsYMUST.State
 000462220617       ,:dsYMUST.DESC
 000465201202       ;
-000466201230
-000467221103       // hidden Subfile Fields for selection
-000468220615       IDH = dsYMUST.ID;
 000469220615
 000470201202         If sqlcode <> 0 or Recnum1 = 17;
 000471201202         leave;
 000472201202         ENDIF;
+000473221104
+000474221104       // hidden Subfile Fields for selection
+000475221104       IDH = dsYMUST.ID;
 000487210315
 000488220615         // highlight
 000489201202         Dunkel_Hell = not Dunkel_Hell;
@@ -307,7 +315,7 @@
 000521220615
 000522220615         Spalten1.S1 = dsYMUST.NAME;
 000523220617         Spalten1.S2 = dsYMUST.ARTIKLE;
-000524220617         Spalten1.S3 = dsYMUST.STATUS;
+000524221104         Spalten1.S3 = dsYMUST.State;
 000525220617         Spalten1.S4 = dsYMUST.DESC;
 000526220615
 000549201203         SFL1 = Spalten1;
@@ -447,3 +455,15 @@
 000842220617
 000843220617       RETURN iZEILE2;
 000844220617       END-PROC;
+000845221108       ////////////////////////////////////////////////////////////////////////
+000846221108       DCL-PROC DltChoice;
+000847221108       DCL-PI *N;
+000848221108       i_ID      LIKE(IDH) CONST;
+000849221108       END-PI;
+000850221108
+000851221108       exec sql
+000852221108       DELETE FROM YMUST
+000853221108       WHERE ID = :i_ID
+000854221108       ;
+000855221108
+000864221108       END-PROC;
