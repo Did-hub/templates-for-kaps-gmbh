@@ -255,10 +255,10 @@
 000423220615       //    NAME = 'ABC'
 000425210315          )
 000426220615         )
+                    offset :rownumberH rows
+                    FETCH FIRST 18 rows only    
 000439210217        )
 000440210217        as fuse
-000441210217        where rownumber > :rownumberH
-000443210217        order by rownumber
 000444210217        ;
 000445210217
 000448220615       exec sql OPEN CursorX;
